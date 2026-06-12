@@ -8,6 +8,21 @@ export type RouteResult = {
   resolvedPath: string;
 };
 
+export function getPathInfo(inputPath: string): RouteResult {
+  const resolvedPath = path.resolve(inputPath.trim());
+  const stats = fs.statSync(resolvedPath);
+
+  if (stats.isDirectory()) {
+    return { type: typeFile.directory, resolvedPath };
+  }
+
+  if (stats.isFile()) {
+    return { type: typeFile.image, resolvedPath };
+  }
+
+  throw new Error(`${inputPath} is not a valid directory or file.`);
+}
+
 export async function verifyRoutePath(): Promise<RouteResult> {
   while (true) {
     const route = await inquirer.prompt([
@@ -18,20 +33,9 @@ export async function verifyRoutePath(): Promise<RouteResult> {
       },
     ]);
     try {
-      const resolvedPath = path.resolve(route.direction.trim());
-      const stats = fs.statSync(resolvedPath);
-      console.log("✅ Selected path:", resolvedPath);
-
-      if (stats.isDirectory()) {
-        return { type: typeFile.directory, resolvedPath };
-      }
-
-      if (stats.isFile()) {
-        return { type: typeFile.image, resolvedPath };
-      }
-
-      console.log(`${route.direction} is not a valid path.`);
-      continue;
+      const result = getPathInfo(route.direction);
+      console.log("✅ Selected path:", result.resolvedPath);
+      return result;
     } catch (error) {
       console.log(`${route.direction} is not a valid path.`);
       continue;

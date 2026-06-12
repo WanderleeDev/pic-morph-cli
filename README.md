@@ -30,21 +30,42 @@ curl -fsSL https://bun.sh/install | bash
 
 ### Installation
 
-1. Clone or navigate into the project directory:
-   ```bash
-   cd pic-morph
-   ```
+To install `pic-morph` globally as a CLI command on your system:
 
-2. Install dependencies:
+#### Using Bun (Recommended)
+```bash
+bun install -g WanderleeDev/pic-morph-cli
+```
+
+#### Using npm
+```bash
+npm install -g WanderleeDev/pic-morph-cli
+```
+
+#### For Local Development & Contributors
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/WanderleeDev/pic-morph-cli.git
+   cd pic-morph-cli
+   ```
+2. Install dependencies and link the command globally:
    ```bash
    bun install
+   chmod +x index.ts
+   bun link
    ```
 
 ---
 
 ## 💻 Usage
 
-To launch the interactive CLI editor, run:
+Once installed globally, you can launch the interactive CLI editor from any terminal:
+
+```bash
+pic-morph
+```
+
+If you are developing locally and want to run it directly:
 
 ```bash
 bun run index.ts
@@ -61,6 +82,16 @@ Follow the prompts to enter:
 Processed files will be saved in your system's pictures directory at:
 ```bash
 ~/Pictures/pic-morph/
+```
+
+---
+
+## 🧪 Running Tests
+
+To run the unit tests with Bun:
+
+```bash
+bun test
 ```
 
 ---

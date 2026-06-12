@@ -1,8 +1,15 @@
 {
   "name": "pic-morph",
   "module": "index.ts",
+  "description": "CLI image editor for resizing, compressing, and converting images",
+  "bin": {
+    "pic-morph": "./index.ts"
+  },
   "type": "module",
   "private": true,
+  "scripts": {
+    "test": "bun test"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },

@@ -1,3 +1,4 @@
+#!/usr/bin/env bun
 import { verifyRoutePath } from "./src/verifyRoutePath";
 import { processFiles } from "./src/proccessFiles";
 import { readdirSync } from "node:fs";
