@@ -14,7 +14,7 @@ describe("getPathInfo", () => {
   test("should identify a file correctly", () => {
     const pkgJson = path.resolve(__dirname, "../package.json");
     const result = getPathInfo(pkgJson);
-    expect(result.type).toBe(typeFile.image); // the CLI returns 'image' for file types
+    expect(result.type).toBe(typeFile.image);
     expect(result.resolvedPath).toBe(pkgJson);
   });
 

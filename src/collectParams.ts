@@ -6,6 +6,23 @@ import {
   type ImageOptions,
 } from "./types";
 
+let isAvifSupportedCached: boolean | null = null;
+
+function checkAvifSupport(): boolean {
+  if (isAvifSupportedCached !== null) return isAvifSupportedCached;
+  try {
+    const png1x1 = Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "base64"
+    );
+    Bun.file(png1x1).image().avif();
+    isAvifSupportedCached = true;
+  } catch (e) {
+    isAvifSupportedCached = false;
+  }
+  return isAvifSupportedCached;
+}
+
 export async function collectParams(): Promise<ImageOptions> {
   return await inquirer.prompt([
     {
@@ -27,14 +44,19 @@ export async function collectParams(): Promise<ImageOptions> {
           });
           return `Invalid format. Please enter ${formatter.format(imageExtensionsValues)}.`;
         }
+
+        if (input === imageExtensions.avif) {
+          if (!checkAvifSupport()) {
+            return "AVIF is not supported on this machine. Please install the necessary codecs (like libavif/libheif) or choose another format.";
+          }
+        }
         return true;
       },
     },
     {
       type: "confirm",
       name: "lossless",
-      message:
-        "Should WebP conversion be lossless? (default: true)",
+      message: "Should WebP conversion be lossless? (default: true)",
       default: true,
       when: (answers) => answers.format === imageExtensions.webp,
     },
