@@ -20,45 +20,65 @@ export async function processFiles(path: string, options: ImageOptions) {
     fit,
   } = options;
 
-  let image = Bun.file(path).image();
+  try {
+    let image = Bun.file(path).image();
 
-  if (width && height) {
-    image = image.resize(width, height, { fit });
-  }
+    if (width && height) {
+      image = image.resize(width, height, { fit });
+    }
 
-  switch (format) {
-    case imageExtensions.webp:
-      image = image.webp({ quality, lossless });
-      break;
-    case imageExtensions.png:
-      image = image.png({ compressionLevel });
-      break;
-    case imageExtensions.jpeg:
-    case imageExtensions.jpg:
-      image = image.jpeg({ quality, progressive });
-      break;
-    case imageExtensions.avif:
-      image = image.avif({ quality });
-      break;
-    default:
-      image = image.webp({ quality });
-      break;
-  }
+    switch (format) {
+      case imageExtensions.webp:
+        image = image.webp({ quality, lossless });
+        break;
+      case imageExtensions.png:
+        image = image.png({ compressionLevel });
+        break;
+      case imageExtensions.jpeg:
+      case imageExtensions.jpg:
+        image = image.jpeg({ quality, progressive });
+        break;
+      case imageExtensions.avif:
+        image = image.avif({ quality });
+        break;
+      default:
+        image = image.webp({ quality });
+        break;
+    }
 
-  await mkdir(DEFAULT_OUTPUT_PATH, { recursive: true });
+    await mkdir(DEFAULT_OUTPUT_PATH, { recursive: true });
 
-  const outputPath = `${DEFAULT_OUTPUT_PATH}/${basename(path, extname(path))}${SLUG_PIC_MORPH}.${format}`;
-  image.write(outputPath);
+    const outputPath = `${DEFAULT_OUTPUT_PATH}/${basename(path, extname(path))}${SLUG_PIC_MORPH}.${format}`;
+    image.write(outputPath);
 
-  console.log(`
+    console.log(`
 ========================================
   Output: ${outputPath}
 ========================================
-    `);
+      `);
 
-  console.log(`
+    console.log(`
   ==========================================
     ✅ Process completed
   ==========================================
-    `);
+      `);
+  } catch (error: any) {
+    if (error.code === "ERR_IMAGE_FORMAT_UNSUPPORTED" || (error.message && error.message.includes("format not supported"))) {
+      console.error(`
+======================================================================
+  ❌ Error: El formato de imagen (${format}) no está soportado en esta máquina.
+  Detalle: ${error.message}
+  Sugerencia: Revisa la sección "Troubleshooting" en el README para instalar
+  los códecs necesarios en tu OS (ej. libavif, libheif), o intenta usar
+  otro formato como PNG, JPEG o WebP.
+======================================================================
+      `);
+    } else {
+      console.error(`
+======================================================================
+  ❌ Error procesando la imagen: ${error.message || error}
+======================================================================
+      `);
+    }
+  }
 }

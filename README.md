@@ -96,6 +96,28 @@ bun test
 
 ---
 
+## 🔍 Troubleshooting
+
+### Unsupported Image Format Error (`ERR_IMAGE_FORMAT_UNSUPPORTED`)
+If you see an error like:
+```text
+error: Image: format not supported on this machine (HEIC/AVIF/TIFF require the OS codec; AVIF encode needs an AV1 encoder)
+code: "ERR_IMAGE_FORMAT_UNSUPPORTED"
+```
+This happens because Bun's native image processor delegates encoding/decoding of modern formats (like AVIF or HEIC) to system-level libraries. You can resolve this by installing the required codecs:
+
+- **Debian/Ubuntu Linux**:
+  ```bash
+  sudo apt-get update
+  sudo apt-get install -y libavif-dev libheif-dev
+  ```
+- **macOS (via Homebrew)**:
+  ```bash
+  brew install shared-mime-info libavif libheif
+  ```
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Runtime**: [Bun](https://bun.sh)
