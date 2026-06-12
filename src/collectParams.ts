@@ -1,53 +1,55 @@
 import inquirer from "inquirer";
-import {
-  imageExtensions,
-  imageExtensionsValues,
-  type ImageExtension,
-  type ImageOptions,
-} from "./types";
+import { unlink } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { imageExtensions, type ImageOptions } from "./types";
 
-function checkAvifSupport(): boolean {
+async function checkAvifSupport(): Promise<boolean> {
+  const tempPath = path.join(
+    os.tmpdir(),
+    `pic-morph-avif-test-${Date.now()}.png`,
+  );
   try {
     const png1x1 = Buffer.from(
       "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
-      "base64"
+      "base64",
     );
-    Bun.file(png1x1).image().avif();
+    await Bun.write(tempPath, png1x1);
+    const result = Bun.file(tempPath).image().avif().toBuffer();
+    if (result instanceof Promise) {
+      await result;
+    }
+    await unlink(tempPath);
     return true;
   } catch (e) {
+    try {
+      await unlink(tempPath);
+    } catch {}
     return false;
   }
 }
 
 export async function collectParams(): Promise<ImageOptions> {
+  const isAvifSupported = await checkAvifSupport();
+
   return await inquirer.prompt([
     {
       type: "select",
       name: "format",
-      message: "Enter the output format (webp, png, jpeg) (optional): ",
+      message: "Select the output format: ",
       choices: [
-        { name: imageExtensions.webp },
-        { name: imageExtensions.png },
-        { name: imageExtensions.jpeg },
-        { name: imageExtensions.avif },
-        { name: imageExtensions.jpg },
+        { name: imageExtensions.webp, value: imageExtensions.webp },
+        { name: imageExtensions.png, value: imageExtensions.png },
+        { name: imageExtensions.jpeg, value: imageExtensions.jpeg },
+        {
+          name: imageExtensions.avif,
+          value: imageExtensions.avif,
+          disabled: !isAvifSupported
+            ? "Not supported on this machine (install libavif/libheif)"
+            : false,
+        },
+        { name: imageExtensions.jpg, value: imageExtensions.jpg },
       ],
-      validate: (input: ImageExtension) => {
-        if (!imageExtensionsValues.includes(input)) {
-          const formatter = new Intl.ListFormat("en", {
-            style: "long",
-            type: "conjunction",
-          });
-          return `Invalid format. Please enter ${formatter.format(imageExtensionsValues)}.`;
-        }
-
-        if (input === imageExtensions.avif) {
-          if (!checkAvifSupport()) {
-            return "AVIF is not supported on this machine. Please install the necessary codecs (like libavif/libheif) or choose another format.";
-          }
-        }
-        return true;
-      },
     },
     {
       type: "confirm",

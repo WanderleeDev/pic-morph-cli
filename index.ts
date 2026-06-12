@@ -8,9 +8,9 @@ import { collectParams } from "./src/collectParams";
 
 async function printOptions() {
   console.log(`
-  ===========================================
-     🖼️  PicMorphCLI - CLI Image Editor
-  ===========================================
+  |===========================================
+  |   🖼️  PicMorphCLI - CLI Image Editor
+  |===========================================
      - Change formats
      - Resize images
      - Convert files fast
