@@ -6,21 +6,17 @@ import {
   type ImageOptions,
 } from "./types";
 
-let isAvifSupportedCached: boolean | null = null;
-
 function checkAvifSupport(): boolean {
-  if (isAvifSupportedCached !== null) return isAvifSupportedCached;
   try {
     const png1x1 = Buffer.from(
       "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
       "base64"
     );
     Bun.file(png1x1).image().avif();
-    isAvifSupportedCached = true;
+    return true;
   } catch (e) {
-    isAvifSupportedCached = false;
+    return false;
   }
-  return isAvifSupportedCached;
 }
 
 export async function collectParams(): Promise<ImageOptions> {
