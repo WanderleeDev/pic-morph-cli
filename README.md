@@ -36,12 +36,12 @@ To install `pic-morph` globally as a CLI command on your system:
 
 #### Using Bun (Recommended)
 ```bash
-bun install -g WanderleeDev/pic-morph-cli
+bun install -g @wanderleedev/pic-morph
 ```
 
 #### Using npm
 ```bash
-npm install -g WanderleeDev/pic-morph-cli
+npm install -g @wanderleedev/pic-morph
 ```
 
 ---
