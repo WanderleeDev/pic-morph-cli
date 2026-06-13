@@ -23,6 +23,9 @@
     "url": "https://github.com/WanderleeDev/pic-morph-cli/issues"
   },
   "homepage": "https://github.com/WanderleeDev/pic-morph-cli#readme",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
   "type": "module",
   "module": "index.ts",
   "bin": {
@@ -30,7 +33,7 @@
   },
   "scripts": {
     "test": "bun test",
-    "release": "./node_modules/.bin/release-it"
+    "release": "release-it"
   },
   "devDependencies": {
     "@types/bun": "latest",
