@@ -1,0 +1,12 @@
+# Dev / IDE
+.vscode/
+.release-it.json
+.github/
+
+# Dependencies
+node_modules/
+bun.lock
+
+# Build / Config
+tsconfig.json
+tests/
