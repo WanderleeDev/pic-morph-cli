@@ -1,6 +1,6 @@
 {
   "name": "@wanderleedev/pic-morph",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CLI image editor for resizing, compressing, and converting images",
   "keywords": [
     "cli",
