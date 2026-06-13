@@ -27,6 +27,13 @@ async function printOptions() {
       const ext = extname(f).toLocaleLowerCase().replace(".", "");
       return imageExtensionsValues.includes(ext as ImageExtension);
     });
+
+    console.log(`
+  |==========================================
+  |   Processing ${files.length} images
+  |==========================================
+    `);
+
     for (const file of files) {
       await processFiles(join(resolvedPath, file), options);
     }
