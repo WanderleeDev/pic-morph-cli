@@ -1,17 +1,40 @@
 {
   "name": "pic-morph",
-  "module": "index.ts",
+  "version": "1.0.0",
   "description": "CLI image editor for resizing, compressing, and converting images",
+  "keywords": [
+    "cli",
+    "image",
+    "editor",
+    "resize",
+    "compress",
+    "convert",
+    "webp",
+    "avif",
+    "bun"
+  ],
+  "author": "WanderleeDev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WanderleeDev/pic-morph-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/WanderleeDev/pic-morph-cli/issues"
+  },
+  "homepage": "https://github.com/WanderleeDev/pic-morph-cli#readme",
+  "type": "module",
+  "module": "index.ts",
   "bin": {
     "pic-morph": "./index.ts"
   },
-  "type": "module",
-  "private": true,
   "scripts": {
-    "test": "bun test"
+    "test": "bun test",
+    "release": "release-it"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "release-it": "^20.2.0"
   },
   "peerDependencies": {
     "typescript": "^5"
