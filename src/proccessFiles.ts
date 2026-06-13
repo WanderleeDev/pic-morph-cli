@@ -1,11 +1,10 @@
-import { basename, extname } from "node:path";
+import { basename, extname, join } from "node:path";
 import { mkdir } from "node:fs/promises";
-import path from "node:path";
 import os from "node:os";
 import { imageExtensions, type ImageOptions } from "./types";
 
-const homeDir = process.env.HOME || os.homedir();
-const DEFAULT_OUTPUT_PATH = path.join(homeDir, "Pictures", "pic-morph");
+const homeDir = os.homedir();
+const DEFAULT_OUTPUT_PATH = join(homeDir, "Pictures", "pic-morph");
 const SLUG_PIC_MORPH = "-pm";
 
 export async function processFiles(path: string, options: ImageOptions) {
@@ -47,7 +46,10 @@ export async function processFiles(path: string, options: ImageOptions) {
 
   await mkdir(DEFAULT_OUTPUT_PATH, { recursive: true });
 
-  const outputPath = `${DEFAULT_OUTPUT_PATH}/${basename(path, extname(path))}${SLUG_PIC_MORPH}.${format}`;
+  const outputPath = join(
+    DEFAULT_OUTPUT_PATH,
+    `${basename(path, extname(path))}${SLUG_PIC_MORPH}.${format}`,
+  );
   await image.write(outputPath);
 
   console.log(`
